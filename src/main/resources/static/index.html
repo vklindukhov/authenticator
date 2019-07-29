@@ -21,6 +21,9 @@
     <div>
         With Github: <a href="/login/github">click here</a>
     </div>
+    <div>
+        With DB: <a onclick="sendAuthWithDb()">click here</a>
+    </div>
 </div>
 <div class="container authenticated" style="display:none">
     Logged in as: <span id="user"></span>
@@ -53,7 +56,35 @@
             $(".authenticated").hide();
         });
         return true;
-    }
+    };
+
+    // function sendAuthWithDb() {
+        var data = {
+            "grant_type": "password",
+            "username": "myuser",
+            "password":"mypassword",
+            "client_id":"android-client",
+            "client_secret":"android-secret"
+        };
+
+        $.ajax({
+            'url': "http://localhost:8080/oauth/token",
+            'type': 'POST',
+            "crossDomain": true,
+            "headers": { 'Authorization': 'Basic YW5kcm9pZC1jbGllbnQ6YW5kcm9pZC1zZWNyZXQ=', //android-client:android-secret in Base64
+                'Content-Type':'application/x-www-form-urlencoded'},
+            "data":data,
+            'success': function (result) {
+                console.log( "My Access token = "+ result.access_token);
+                console.log( "My refresh token = "+ result.refresh_token);
+                console.log("expires in = "+result.expires_in)
+                succesCallback()
+            },
+            'error': function (XMLHttpRequest, textStatus, errorThrown) {
+                errorCallback(XMLHttpRequest, textStatus, errorThrown)
+            }
+        });
+    // }
 </script>
 </body>
 </html>

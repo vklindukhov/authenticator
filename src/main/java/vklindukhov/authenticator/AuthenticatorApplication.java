@@ -1,69 +1,60 @@
 package vklindukhov.authenticator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @SpringBootApplication
-@RestController
-@EnableOAuth2Client
-@EnableAuthorizationServer
-@Order(2147483640) // SecurityProperties.ACCESS_OVERRIDE_ORDER = 2147483640
+//@RestController
+//@EnableOAuth2Client
+//@EnableAuthorizationServer
+//@Order(2147483640) // SecurityProperties.ACCESS_OVERRIDE_ORDER = 2147483640
 @SuppressWarnings("squid:CommentedOutCodeLine")
-public class AuthenticatorApplication extends WebSecurityConfigurerAdapter {
-    private final OAuth2ClientContext oauth2ClientContext;
+public class AuthenticatorApplication
+//        extends WebSecurityConfigurerAdapter
+{
+//    private final OAuth2ClientContext oauth2ClientContext;
 
     public static void main(String[] args) {
         SpringApplication.run(AuthenticatorApplication.class, args);
     }
+//
+//
+//    @Autowired
+//    @SuppressWarnings("all")
+//    public AuthenticatorApplication(
+//            final OAuth2ClientContext oauth2ClientContext
+//    ) {
+//        this.oauth2ClientContext = oauth2ClientContext;
+//    }
 
-    @Autowired
-    @SuppressWarnings("all")
-    public AuthenticatorApplication(
-            final OAuth2ClientContext oauth2ClientContext
-    ) {
-        this.oauth2ClientContext = oauth2ClientContext;
-    }
-
-    @SuppressWarnings("unused")
-    @RequestMapping({"/user", "/me"})
-    public Map<String, String> user(Principal principal) {
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("name", principal.getName());
-        return map;
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .antMatcher("/**")
-                .authorizeRequests()
-                .antMatchers("/", "/login**", "/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
+    //    @SuppressWarnings("unused")
+//    @RequestMapping({"/user", "/me"})
+//    public Map<String, String> user(Principal principal) {
+//        Map<String, String> map = new LinkedHashMap<>();
+//        map.put("name", principal.getName());
+//        return map;
+//    }
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .antMatcher("/**")
+//                .authorizeRequests()
+//                .antMatchers("/", "/login**", "/webjars/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and().exceptionHandling()
+//                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
 //                .and().logout().logoutSuccessUrl("/").permitAll()
 //                .and().csrf().csrfTokenRepository(withHttpOnlyFalse())
 //                .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
-        ;
-    }
-
+//        ;
+//    }
+//
 //    @Bean
 //    public FilterRegistrationBean<OAuth2ClientContextFilter> oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
 //        FilterRegistrationBean<OAuth2ClientContextFilter> registration = new FilterRegistrationBean<>();
@@ -140,6 +131,13 @@ public class AuthenticatorApplication extends WebSecurityConfigurerAdapter {
     @Configuration
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+        private static final String RESOURCE_ID = "resource_id";
+
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) {
+            resources.resourceId(RESOURCE_ID);
+        }
+
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
