@@ -1,6 +1,12 @@
 security:
   oauth2:
     client:
+      client-id: acme
+      client-secret: acmesecret
+      scope: read,write
+      auto-approve-scopes: '.*'
+  facebook:
+    client:
       clientId: 471335380090287
       clientSecret: 3bcfe682b37ab8a316eb3a3dddf4b79c
       accessTokenUri: https://graph.facebook.com/oauth/access_token
@@ -10,3 +16,20 @@ security:
       clientAuthenticationScheme: form
     resource:
       userInfoUri: https://graph.facebook.com/me
+  github:
+    client:
+      clientId: 65c6c40a22b9db9ff90d
+      clientSecret: 76977c9a305d106a5264b18d8eaf872361ece869
+      accessTokenUri: https://github.com/login/oauth/access_token
+      userAuthorizationUri: https://github.com/login/oauth/authorize
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://api.github.com/user
+logging:
+  level:
+    root: DEBUG
+    org.springframework: DEBUG
+    vklindukhov.grabber: DEBUG
+    org.hibernate: DEBUG
+    org.hibernate.SQL: DEBUG
+

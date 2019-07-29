@@ -15,7 +15,12 @@
 <body>
 <h1>Demo</h1>
 <div class="container unauthenticated">
-    With Facebook: <a href="/login">click here</a>
+    <div>
+        With Facebook: <a href="/login/facebook">click here</a>
+    </div>
+    <div>
+        With Github: <a href="/login/github">click here</a>
+    </div>
 </div>
 <div class="container authenticated" style="display:none">
     Logged in as: <span id="user"></span>
@@ -26,7 +31,7 @@
 
 <script type="text/javascript">
     $.ajaxSetup({
-        beforeSend : function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                     // Only send the token to relative URLs i.e. locally.
